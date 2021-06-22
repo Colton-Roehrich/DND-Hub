@@ -7,7 +7,7 @@ function Navigation(props) {
       <nav class="navbar navbar-expand navbar-dark bg-dark">
         <div class="container">
           <Link class="navbar-brand" to="/">
-            Dungeons & Dragons Hub
+            Dungeons &amp; Dragons Hub
           </Link>
 
           <div>
