@@ -20,7 +20,7 @@ function Home(props) {
               <header className="App-header">
           
                   <Link class="nav-link" to="/DieRoller">
-                    <h4>Die Roller</h4>
+                  <h4>Die Roller</h4>
                     <img src={dragonDieLink} id="die roller" className="App-logo" alt="logo" />
                     <span class="sr-only">(current)</span>
                   </Link>
@@ -48,7 +48,7 @@ function Home(props) {
             </div>
 
             <div className="item4">
-            <h4>Die Roller</h4>
+            <h4>Monsters</h4>
             <header className="App-header">
                 <img src={monsterLink} id="die roller" className="App-logo" alt="logo" />
             </header>

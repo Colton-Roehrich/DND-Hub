@@ -5,6 +5,7 @@
 
 .App-logo {
   height: 30vmin;
+  width: auto;
   pointer-events: none;
 
 }
@@ -30,7 +31,9 @@
   color: white;
 }
 
-
+h4{
+  padding-bottom: 7vmin;
+}
 .App-link {
   color: #61dafb;
 }
@@ -49,7 +52,7 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto auto;
   grid-gap: 15px;
   
 }
