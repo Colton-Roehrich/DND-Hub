@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
 
 export { default as Navigation } from "./Shared/Navigation";
 export { default as Footer } from "./Shared/Footer";
@@ -11,10 +13,16 @@ export { default as About } from "./Pages/About";
 export { default as Contact } from "./Pages/Contact";
 export { default as dTwenty} from "./Components/die/dTwenty";
 
+const storeInstance = createStore(
+  combineReducers({
+  })
+)
 ReactDOM.render(
+  <Provider store={storeInstance}>
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
+  </Provider>,
   document.getElementById('root')
 );
 

@@ -19,21 +19,21 @@ function Home(props) {
               
               <header className="App-header">
           
-                  <Link class="nav-link" to="/DieRoller">
+                  <Link className="nav-link" to="/DieRoller">
                   <h4>Die Roller</h4>
                     <img src={dragonDieLink} id="die roller" className="App-logo" alt="logo" />
-                    <span class="sr-only">(current)</span>
+                    <span className="sr-only">(current)</span>
                   </Link>
                 
               </header>
             </div>
 
             <div className="item2">
-            <Link class="nav-link" to="/TurnTimer">
+            <Link className="nav-link" to="/TurnTimer">
               <h4>Turn Timer</h4>
               <header className="App-header">
                   <img src={hourglassLink} id="turn tracker" className="App-logo" alt="logo" />
-                <span class="sr-only">(current)</span>
+                <span className="sr-only">(current)</span>
               </header>
             </Link>
             
@@ -43,7 +43,7 @@ function Home(props) {
             <h4>Spells and Weapons</h4>
             <header className="App-header">
                 <img src={spellbookLink} id="spells and weapons" className="App-logo" alt="logo" />
-                <span class="sr-only">(current)</span>
+                <span className="sr-only">(current)</span>
                 </header>
             </div>
 
