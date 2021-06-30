@@ -2,31 +2,35 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { createStore, combineReducers } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import rootReducer from './redux/reducers'; // imports ./redux/reducers/index.js
+import rootSaga from './redux/sagas'; // imports ./redux/sagas/index.js
+const sagaMiddleware = createSagaMiddleware();
 
-export { default as Navigation } from "./Shared/Navigation";
-export { default as Footer } from "./Shared/Footer";
-export { default as Home } from "./Pages/Home";
-export { default as About } from "./Pages/About";
-export { default as Contact } from "./Pages/Contact";
-export { default as dTwenty} from "./Components/die/dTwenty";
+// this line creates an array of all of redux middleware you want to use
+// we don't want a whole ton of console logs in our production code
+// logger will only be added to your project if your in development mode
+const middlewareList = process.env.NODE_ENV === 'development' ?
+  [sagaMiddleware] :
+  [sagaMiddleware];
 
-const storeInstance = createStore(
-  combineReducers({
-  })
-)
-ReactDOM.render(
-  <Provider store={storeInstance}>
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-  </Provider>,
-  document.getElementById('root')
+const store = createStore(
+  // tells the saga middleware to use the rootReducer
+  // rootSaga contains all of our other reducers
+  rootReducer,
+  // adds all middleware to our project including saga and logger
+  applyMiddleware(...middlewareList),
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// tells the saga middleware to use the rootSaga
+// rootSaga contains all of our other sagas
+sagaMiddleware.run(rootSaga);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root'),
+);

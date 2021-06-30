@@ -1,7 +1,15 @@
-.timer{
- color:white;   
+
+.name{
+    font-weight: bolder;  
+}
+.myTurn{
+    border-color:greenyellow;
+    border-width:.2em;
 }
 .extraPool{
     background-color:rgb(255, 190, 190);   
     color:rgb(66, 22, 22);   
-   }
+}
+.time{
+    font-size:3rem;
+}
