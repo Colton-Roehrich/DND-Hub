@@ -4,14 +4,7 @@ const pool = require('../modules/pool.js');
 
 // GET Route
 router.get('/all', (req, res) => {
-    res.send([
-        {name:"Fred", hitpoints:113, armorClass:15},
-        {name:"Shiro",  hitpoints:74, armorClass:13},
-        {name:"Laxog",  hitpoints:99, armorClass:22},
-        {name:"Yaza",  hitpoints:89, armorClass:17},
-        {name:"Wren",  hitpoints:58, armorClass:12},
-        {name:"Proto",  hitpoints:113, armorClass:15},]);
-    const queryText = 'SELECT username, min(recordtime) FROM winners GROUP BY username ORDER BY min(recordtime) ASC LIMIT 15;';
+    const queryText = 'SELECT ch.*, cl.classname FROM character ch INNER JOIN class cl on ch.class = cl.id';
     pool
         .query(queryText)
         .then((result) => {
