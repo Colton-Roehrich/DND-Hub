@@ -12,8 +12,8 @@ function* getAllCharacters(action) {
         console.log('Error with athletes:', error);
     }
 }
-function* AthleteSaga() {
+function* characterSaga() {
     yield takeLatest('GET_CHARACTERS', getAllCharacters);
 }
 
-export default AthleteSaga;
+export default characterSaga;

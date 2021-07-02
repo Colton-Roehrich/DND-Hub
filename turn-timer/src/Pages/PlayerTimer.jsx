@@ -4,10 +4,10 @@ import Swal from "sweetalert2"
 import "../Pages_Styling/TurnTimer.css"
 class PlayerTimer extends Component {
   state = {
-    name: this.props.name || "UNNAMED PLAYER",
-    armorClass: this.props.armorClass,
-    hitPoints: this.props.hitpoints,
-    initiative: null,
+    name: this.props.player.name || "UNNAMED PLAYER",
+    armorClass: this.props.player.armor_class,
+    hitPoints: this.props.player.max_hitpoints,
+    initiative: this.props.player.initiative,
     hasInitiative: false,
     countDown: this.props.time || 60,
     extrapool: this.props.extraPool || 60,
@@ -70,7 +70,8 @@ class PlayerTimer extends Component {
     })
     this.resetTimer();
   }
-  setInitiative=(event)=>{ 
+  setInitiative=()=>{ 
+    this.props.dispatch({type:"UPDATE_COMBAT", payload:{player_id:this.props.player.id, initiative:this.state.initiative}})
     this.setState({
       hasInitiative:true,
     })
@@ -86,7 +87,7 @@ class PlayerTimer extends Component {
             <button className="btn btn-success" onClick={()=>this.setState({hitPoints:this.state.hitPoints+1})}>+</button>
           </div>
           <div className="col-6 name">AC: {this.state.armorClass}</div>
-          <div className="col-6 name">Initiative:{this.state.hasInitiative?<div>{this.state.initiative}</div>:<div><input value = {this.state.initiative} onChange={(event)=>this.setState({initiative:event.target.value})}/> <button className="btn btn-primary" onClick={(event)=>this.setInitiative(event)}>Set Initiative</button></div>}</div>
+          <div className="col-6 name">Initiative:{this.state.hasInitiative?<div>{this.state.initiative}</div>:<div><input value = {this.state.initiative} onChange={(event)=>this.setState({initiative:event.target.value})}/> <button className="btn btn-primary" onClick={()=>this.setInitiative()}>Set Initiative</button></div>}</div>
         </div>
         <div className="timer row time">
           <div className="timer col-6">Time Remaining</div>
@@ -101,4 +102,7 @@ class PlayerTimer extends Component {
     );
   }
 }
-export default PlayerTimer
+const mapStateToProps = (state) => {
+    return {};
+}
+export default connect(mapStateToProps)(PlayerTimer)
