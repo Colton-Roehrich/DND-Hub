@@ -4,7 +4,10 @@ import "../../Pages_Styling/TurnTimer.css";
 function PlayerTimer(props) {
   const dispatch = useDispatch();
   const [hitPoints, setHitPoints] = useState(props.player.max_hitpoints);
-  const [dead, setDead] = useState(false);
+  const [incomingDamage, setIncomingDamage] = useState(0);
+  const [dead, setDead] = useState(false);  
+  const [failedSaves, setFailedSaves] = useState(0);
+  const [successfulSaves, setSuccessfulSaves] = useState(0);
   const [initiative, setInitiative] = useState(props.player.initiative);
   let interval = null;
   useEffect(() => {
@@ -12,7 +15,7 @@ function PlayerTimer(props) {
   }, []);
   useEffect(() => {
     if (props.myTurn && props.running &&(interval === null || !interval.running)) {
-      if(hitPoints<=0){
+      if(dead || successfulSaves >= 3|| failedSaves >= 3){
         props.nextPlayer()
       }
       interval = setInterval(() => {
@@ -59,26 +62,74 @@ function PlayerTimer(props) {
   };
   return (
     <div className={props.myTurn ? "card col-5 m-1 myTurn" : "card col-5 m-1"}>
+      {!dead && hitPoints<=0 && successfulSaves <3 && props.myTurn ?
+      <div>
+        <span><div className= 'green'>{successfulSaves}</div><div className= 'red'>{failedSaves}</div></span>
+        <button className='btn btn-success' onClick={()=>{
+          props.nextPlayer();
+          if(successfulSaves == 2){
+            setFailedSaves(0);
+          }
+          setSuccessfulSaves(successfulSaves+1);
+          }}>
+          Success
+          </button>
+        <button className='btn btn-danger' onClick={()=>{
+          props.nextPlayer();
+          if(failedSaves === 2){
+            setDead(true);
+          }
+          setFailedSaves(failedSaves+1)}
+        }>
+          Fail
+          </button>
+          </div>:
+      !dead && hitPoints <= 0 && 
+      <button className='btn btn-danger' onClick={()=>{
+        if(successfulSaves === 3){
+          setSuccessfulSaves(0);
+        }
+        if(failedSaves === 2){
+          setDead(true);
+        }
+        setFailedSaves(failedSaves+1)}
+      }>
+        Fail
+        </button>}
+      {dead && <div className="red">YOU ARE DEAD</div>} 
       <div className="mb-2 row">
         <div className="col-6 name">Name: {props.player.name}</div>
         <div className="col-6 name">
           Hitpoints:{hitPoints}
           <button
             className="btn-sm btn-danger"
-            onClick={() => setHitPoints(hitPoints - 1)}
+            onClick={() => {
+              const hitPointChange = -1*(parseInt(incomingDamage)>0?parseInt(incomingDamage):1);
+              setHitPoints(parseInt(hitPoints)+hitPointChange);
+              setIncomingDamage(0);
+            }
+          }
           >
             -
           </button>
+              <input className="col-3" value={incomingDamage>0?incomingDamage:''} onChange={(event)=>setIncomingDamage(event.target.value)}/>
           <button
             className="btn-sm btn-success"
-            onClick={() => setHitPoints(hitPoints + 1)}
+            onClick={() => {
+              const hitPointChange = parseInt(incomingDamage)>0?parseInt(incomingDamage):1;
+              setHitPoints(parseInt(hitPoints)+hitPointChange);
+              setIncomingDamage(0);
+            }
+          }
           >
             +
           </button>
         </div>
         <div className="col-6 name">AC: {props.player.armor_class}
-        
-          <div className="red">{props.player.extra_time_pool}</div></div>
+        {props.player.has_initiative &&<div>Extra Time Pool: 
+          <div className="red">{props.player.extra_time_pool}</div></div>}
+          </div>
+          {props.valuesSet&&
         <div className="col-6 name">
           Initiative:
           {props.player.has_initiative ? (
@@ -98,16 +149,8 @@ function PlayerTimer(props) {
               </button>
             </div>
           )}
-        </div>
+        </div>}
       </div>
-      {props.myTurn && (
-        <button
-          className="btn-sm btn-primary "
-          onClick={()=>props.nextPlayer()}
-        >
-          Next Turn
-        </button>
-      )}
     </div>
   );
 }
