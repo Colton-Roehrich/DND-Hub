@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
-import "../Pages_Styling/TurnTimer.css";
+import "../../Pages_Styling/TurnTimer.css";
 function PlayerTimer(props) {
   const dispatch = useDispatch();
-  const [extrapool, setExtrapool] = useState(props.extraPool);
-  const [currentCount, setCurrentCount] = useState(props.time);
   const [hitPoints, setHitPoints] = useState(props.player.max_hitpoints);
   const [initiative, setInitiative] = useState(props.player.initiative);
   let interval = null;
-  function reset() {
-    setCurrentCount(props.time);
-  }
   useEffect(() => {
     newInitiative(false);
   }, []);
   useEffect(() => {
-    if (props.myTurn && (interval === null || !interval.running)) {
+    if (props.myTurn && props.running &&(interval === null || !interval.running)) {
       interval = setInterval(() => {
-        if (currentCount > 0) {
-          setCurrentCount((currentCount) => currentCount - 1);
-        } else if (extrapool > 0) {
-          setExtrapool((extrapool) => extrapool - 1);
+        if (props.time > 0) {
+          props.setTime(() => props.time - 1);
+        } else if (props.player.extra_time_pool > 0) {
+          setExtraPool( props.player.extra_time_pool - 1);
         } else {
-          nextPlayer();
+          props.nextPlayer();
         }
       }, 1000);
     } else {
@@ -31,28 +25,32 @@ function PlayerTimer(props) {
     }
     return () => clearInterval(interval);
   });
-
+  const setExtraPool = (newPool)=>{
+    dispatch({
+    type: "UPDATE_COMBAT",
+    payload: {
+      ...props.player,
+      player_id: props.player.id,
+      extraPool:newPool,
+    },
+  });
+  }
   useEffect(() => {
     return async () => {
       await setInitiative(-5);
       await newInitiative(false);
     };
   }, []);
-
-  const nextPlayer = () => {
-    props.nextPlayer();
-    reset();
-  };
   const newInitiative = async (isNew) => {
     await dispatch({
       type: "UPDATE_COMBAT",
       payload: {
         player_id: props.player.id,
-        initiative: initiative,
+        initiative: isNew?initiative:-5,
         has_initiative: isNew,
+        extraPool:props.extraPool,
       },
     });
-    setInitiative(-5);
   };
   return (
     <div className={props.myTurn ? "card col-5 m-1 myTurn" : "card col-5 m-1"}>
@@ -98,14 +96,14 @@ function PlayerTimer(props) {
       <div className=" row ">
         <div className=" col-6">Time Remaining</div>
         <div className=" col-6 row ">
-          <div className="col-6">{currentCount}</div>
-          <div className="col-6 red">{extrapool}</div>
+          <div className="col-6">{props.time}</div>:
+          <div className="col-6 red">{props.player.extra_time_pool}</div>
         </div>
       </div>
       {props.myTurn && (
         <button
           className="btn btn-primary "
-          onClick={() => nextPlayer(initiative)}
+          onClick={()=>props.nextPlayer()}
         >
           Next Turn
         </button>

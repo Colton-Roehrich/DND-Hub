@@ -7,7 +7,7 @@ import { default as Home } from "./Pages/Home";
 import { default as About } from "./Pages/About";
 import { default as Contact } from "./Pages/Contact";
 import { default as DieRoller } from "./Pages/DieRoller";
-import { default as TurnTimer} from "./Pages/TurnTimer";
+import { default as TurnTimer} from "./Pages/Turn Timer/TurnTimer";
 function App() {
   return (
     

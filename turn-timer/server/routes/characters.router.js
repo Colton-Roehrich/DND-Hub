@@ -4,7 +4,7 @@ const pool = require("../modules/pool.js");
 
 // GET Route
 router.get("/all", (req, res) => {
-  const queryText = `SELECT ch.*, cl.classname, cm.initiative, cm.has_initiative FROM character ch 
+  const queryText = `SELECT ch.*, cl.classname, cm.initiative, cm.has_initiative, cm.extra_time_pool FROM character ch 
     INNER JOIN class cl on ch.class_id = cl.id 
     INNER JOIN combat cm on cm.character_id = ch.id`;
   pool
