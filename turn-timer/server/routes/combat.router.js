@@ -21,6 +21,12 @@ router.put("/", (req, res) => {
       res.sendStatus(500);
     });
 });
+router.put("/extraPool/", (req, res) => {
+  const extraPool = req.body.extraPool;
+  const queryText =
+    "UPDATE combat set extra_time_pool = $1 ";
+  pool
+    .query(queryText, [extraPool])
     .then((result) => {
       res.send(result.rows);
     })

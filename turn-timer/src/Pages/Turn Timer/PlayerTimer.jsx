@@ -4,6 +4,7 @@ import "../../Pages_Styling/TurnTimer.css";
 function PlayerTimer(props) {
   const dispatch = useDispatch();
   const [hitPoints, setHitPoints] = useState(props.player.max_hitpoints);
+  const [dead, setDead] = useState(false);
   const [initiative, setInitiative] = useState(props.player.initiative);
   let interval = null;
   useEffect(() => {
@@ -11,6 +12,9 @@ function PlayerTimer(props) {
   }, []);
   useEffect(() => {
     if (props.myTurn && props.running &&(interval === null || !interval.running)) {
+      if(hitPoints<=0){
+        props.nextPlayer()
+      }
       interval = setInterval(() => {
         if (props.time > 0) {
           props.setTime(() => props.time - 1);
@@ -25,6 +29,13 @@ function PlayerTimer(props) {
     }
     return () => clearInterval(interval);
   });
+  useEffect(() => {
+    return async () => {
+      await setInitiative(-5);
+      await newInitiative(false);
+    };
+  }, []);
+  
   const setExtraPool = (newPool)=>{
     dispatch({
     type: "UPDATE_COMBAT",
@@ -35,12 +46,6 @@ function PlayerTimer(props) {
     },
   });
   }
-  useEffect(() => {
-    return async () => {
-      await setInitiative(-5);
-      await newInitiative(false);
-    };
-  }, []);
   const newInitiative = async (isNew) => {
     await dispatch({
       type: "UPDATE_COMBAT",
@@ -59,19 +64,21 @@ function PlayerTimer(props) {
         <div className="col-6 name">
           Hitpoints:{hitPoints}
           <button
-            className="btn btn-danger"
+            className="btn-sm btn-danger"
             onClick={() => setHitPoints(hitPoints - 1)}
           >
             -
           </button>
           <button
-            className="btn btn-success"
+            className="btn-sm btn-success"
             onClick={() => setHitPoints(hitPoints + 1)}
           >
             +
           </button>
         </div>
-        <div className="col-6 name">AC: {props.player.armor_class}</div>
+        <div className="col-6 name">AC: {props.player.armor_class}
+        
+          <div className="red">{props.player.extra_time_pool}</div></div>
         <div className="col-6 name">
           Initiative:
           {props.player.has_initiative ? (
@@ -84,7 +91,7 @@ function PlayerTimer(props) {
                 onChange={(event) => setInitiative(event.target.value)}
               />{" "}
               <button
-                className="btn btn-primary col-7"
+                className="btn-sm btn-primary col-7"
                 onClick={() => newInitiative(true)}
               >
                 Set Initiative
@@ -93,16 +100,9 @@ function PlayerTimer(props) {
           )}
         </div>
       </div>
-      <div className=" row ">
-        <div className=" col-6">Time Remaining</div>
-        <div className=" col-6 row ">
-          <div className="col-6">{props.time}</div>:
-          <div className="col-6 red">{props.player.extra_time_pool}</div>
-        </div>
-      </div>
       {props.myTurn && (
         <button
-          className="btn btn-primary "
+          className="btn-sm btn-primary "
           onClick={()=>props.nextPlayer()}
         >
           Next Turn
