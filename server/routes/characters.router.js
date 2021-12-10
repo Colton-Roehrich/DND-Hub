@@ -9,10 +9,10 @@ router.get("/all", (req, res) => {
     INNER JOIN combat cm on cm.character_id = ch.id`;
   pool
     .query(queryText)
-    .then((result) => {
+    .then(result => {
       res.send(result.rows);
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(`Error while making query: ${queryText}\n`);
       res.sendStatus(500);
     });
@@ -25,10 +25,26 @@ router.get("/:id", (req, res) => {
     "SELECT ch.*, cl.classname FROM character ch INNER JOIN class cl on ch.class_id = cl.id INNER JOIN campaign cm on ch.campaign_id = cm.id where ch.id = $1";
   pool
     .query(queryText, [id])
-    .then((result) => {
+    .then(result => {
       res.send(result.rows);
     })
-    .catch((error) => {
+    .catch(error => {
+      console.log(`Error while making query: ${queryText}\n`);
+      res.sendStatus(500);
+    });
+});
+// GET Route
+router.put("/:id", (req, res) => {
+  const id = req.params.id;
+  const current_hitpoints = req.body.current_hitpoints;
+  console.log("id:", id, "current hitpoints: ", current_hitpoints);
+  const queryText = "UPDATE character set current_hitpoints = $1 where id = $2";
+  pool
+    .query(queryText, [current_hitpoints, id])
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(error => {
       console.log(`Error while making query: ${queryText}\n`);
       res.sendStatus(500);
     });
