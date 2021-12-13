@@ -1,5 +1,5 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { default as Navigation } from "./Shared/Navigation";
 import { default as Footer } from "./Shared/Footer";
@@ -7,12 +7,11 @@ import { default as Home } from "./Pages/Home";
 import { default as About } from "./Pages/About";
 import { default as Contact } from "./Pages/Contact";
 import { default as DieRoller } from "./Pages/DieRoller";
-import { default as TurnTimer} from "./Pages/Turn Timer/TurnTimer";
+import { default as TurnTimer } from "./Pages/Turn Timer/TurnTimer";
 function App() {
   return (
-    
     <div className="App">
-  <Router>
+      <Router>
         <Navigation />
         <Switch>
           <Route path="/" exact component={() => <Home />} />
@@ -21,11 +20,7 @@ function App() {
           <Route path="/DieRoller" exact component={() => <DieRoller />} />
           <Route path="/TurnTimer" exact component={() => <TurnTimer />} />
         </Switch>
-        <Footer />
       </Router>
-      
-        
-        
     </div>
   );
 }

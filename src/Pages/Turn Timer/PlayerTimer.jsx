@@ -2,19 +2,38 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import "../../Pages_Styling/TurnTimer.css";
 function PlayerTimer(props) {
+  const {
+    player,
+    myTurn,
+    running,
+    nextPlayer,
+    time,
+    setTime,
+    extraPool,
+    valuesSet
+  } = props;
+  const {
+    current_hitpoints,
+    has_initiative,
+    id,
+    extra_time_pool,
+    nickname,
+    armor_class,
+    status_effect,
+    status_effect_time
+  } = player;
   const dispatch = useDispatch();
   const [incomingDamage, setIncomingDamage] = useState(0);
   const [dead, setDead] = useState(false);
   const [failedSaves, setFailedSaves] = useState(0);
   const [successfulSaves, setSuccessfulSaves] = useState(0);
   const [initiative, setInitiative] = useState(props.player.initiative);
-  const { current_hitpoints } = props.player;
   let interval = null;
   const setHitPoints = value => {
     dispatch({
       type: "UPDATE_CHARACTER",
       payload: {
-        ...props.player,
+        ...player,
         current_hitpoints: value
       }
     });
@@ -23,21 +42,17 @@ function PlayerTimer(props) {
     newInitiative(false);
   }, []);
   useEffect(() => {
-    if (
-      props.myTurn &&
-      props.running &&
-      (interval === null || !interval.running)
-    ) {
+    if (myTurn && running && (interval === null || !interval.running)) {
       if (dead || successfulSaves >= 3 || failedSaves >= 3) {
-        props.nextPlayer();
+        nextPlayer();
       }
       interval = setInterval(() => {
-        if (props.time > 0) {
-          props.setTime(() => props.time - 1);
-        } else if (props.player.extra_time_pool > 0) {
-          setExtraPool(props.player.extra_time_pool - 1);
+        if (time > 0) {
+          setTime(() => time - 1);
+        } else if (extra_time_pool > 0) {
+          setExtraPool(extra_time_pool - 1);
         } else {
-          props.nextPlayer();
+          nextPlayer();
         }
       }, 1000);
     } else {
@@ -56,8 +71,8 @@ function PlayerTimer(props) {
     dispatch({
       type: "UPDATE_COMBAT",
       payload: {
-        ...props.player,
-        player_id: props.player.id,
+        ...player,
+        player_id: id,
         extraPool: newPool
       }
     });
@@ -66,16 +81,16 @@ function PlayerTimer(props) {
     await dispatch({
       type: "UPDATE_COMBAT",
       payload: {
-        player_id: props.player.id,
+        player_id: id,
         initiative: isNew ? initiative : -5,
         has_initiative: isNew,
-        extraPool: props.extraPool
+        extraPool: extraPool
       }
     });
   };
   return (
-    <div className={props.myTurn ? "card col-5 m-1 myTurn" : "card col-5 m-1"}>
-      {!dead && props <= 0 && successfulSaves < 3 && props.myTurn ? (
+    <div className={myTurn ? "card col-5 m-1 myTurn" : "card col-5 m-1"}>
+      {!dead && current_hitpoints <= 0 && successfulSaves < 3 && myTurn ? (
         <div>
           <span>
             <div className="green">{successfulSaves}</div>
@@ -84,7 +99,7 @@ function PlayerTimer(props) {
           <button
             className="btn btn-success"
             onClick={() => {
-              props.nextPlayer();
+              nextPlayer();
               if (successfulSaves == 2) {
                 setFailedSaves(0);
               }
@@ -93,10 +108,11 @@ function PlayerTimer(props) {
           >
             Success
           </button>
+
           <button
             className="btn btn-danger"
             onClick={() => {
-              props.nextPlayer();
+              nextPlayer();
               if (failedSaves === 2) {
                 setDead(true);
               }
@@ -127,7 +143,7 @@ function PlayerTimer(props) {
       )}
       {dead && <div className="red">YOU ARE DEAD</div>}
       <div className="mb-2 row">
-        <div className="col-6 name">Name: {props.player.name}</div>
+        <div className="col-6 name">Name: {nickname}</div>
         <div className="col-6 name">
           Hitpoints:{current_hitpoints}
           <button
@@ -150,6 +166,7 @@ function PlayerTimer(props) {
           <button
             className="btn-sm btn-success"
             onClick={() => {
+              setDead(false);
               const hitPointChange =
                 parseInt(incomingDamage) > 0 ? parseInt(incomingDamage) : 1;
               setHitPoints(parseInt(current_hitpoints) + hitPointChange);
@@ -160,19 +177,19 @@ function PlayerTimer(props) {
           </button>
         </div>
         <div className="col-6 name">
-          AC: {props.player.armor_class}
-          {props.player.has_initiative && (
+          AC: {armor_class}
+          {has_initiative && (
             <div>
               Extra Time Pool:
-              <div className="red">{props.player.extra_time_pool}</div>
+              <div className="red">{extra_time_pool}</div>
             </div>
           )}
         </div>
-        {props.valuesSet && (
+        {valuesSet && (
           <div className="col-6 name">
             Initiative:
-            {props.player.has_initiative ? (
-              <div>{props.player.initiative}</div>
+            {has_initiative ? (
+              <div>{initiative}</div>
             ) : (
               <div className="row">
                 <input
@@ -191,6 +208,20 @@ function PlayerTimer(props) {
           </div>
         )}
       </div>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button
+        className="btn btn-danger"
+        onClick={() =>
+          dispatch({ type: "DELETE_COMBAT", payload: { character_id: id } })
+        }
+      >
+        Remove from combat
+      </button>
     </div>
   );
 }

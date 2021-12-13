@@ -10,39 +10,39 @@ function NewPlayer() {
     dispatch({
       type: "ADD_CHARACTER",
       payload: {
-        name: name,
-        AC: AC,
-        hitpoints: hitpoints
+        nickname: name,
+        armor_class: AC,
+        current_hitpoints: hitpoints
       }
     });
   };
   return (
     <div className="white my-5">
-      <div className="row col-8">
-        <div className="col-2">NAME:</div>
+      <div className="row col-12">
+        <div className="col-4">NAME:</div>
         <input
-          className="col-2"
+          className="col-8"
           value={name}
           onChange={event => setName(event.target.value)}
         />
       </div>
-      <div className="row col-8">
-        <div className="col-2">ARMOR CLASS:</div>
+      <div className="row col-12">
+        <div className="col-4">ARMOR CLASS:</div>
         <input
-          className="col-2"
+          className="col-8"
           value={AC}
           onChange={event => setAC(event.target.value)}
         />
       </div>
-      <div className="row col-8">
-        <div className="col-2">HITPOINTS:</div>
+      <div className="row col-12">
+        <div className="col-4">HITPOINTS:</div>
         <input
-          className="col-2"
+          className="col-8"
           value={hitpoints}
           onChange={event => setHitpoints(event.target.value)}
         />
       </div>
-      <div className="row col-8">
+      <div className="row col-12">
         <div className="col-4 d-flex justify-content-center">
           <button className="btn btn-success" onClick={() => addCharacter()}>
             Add Character

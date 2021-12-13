@@ -1,11 +1,11 @@
 //set athlete list to action payload
 const characterReducer = (state = [], action) => {
-    switch (action.type) {
-        case 'SET_CHARACTERS':
-            return action.payload;
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case "SET_INACTIVE_CHARACTERS":
+      return action.payload;
+    default:
+      return state;
+  }
 };
 
 // user will be on the redux state at:

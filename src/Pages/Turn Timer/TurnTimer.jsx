@@ -3,28 +3,32 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import "../../Pages_Styling/TurnTimer.css";
+import Timer from "./Timer";
+import AdjustSettings from "./AdjustSettings";
 import NewPlayer from "./NewPlayer";
 import PlayerTimer from "./PlayerTimer";
+import InactivePlayers from "./InactivePlayers";
 function TimeoutComponent() {
   const dispatch = useDispatch();
+  const [timeElapsed, setTimeElapsed] = useState(null);
   const [countDown, setCountDown] = useState(null);
   const [valuesSet, setValuesSet] = useState(false);
   const [time, setTime] = useState(0);
   const [extraPool, setExtraPool] = useState(-1);
   const [running, setRunning] = useState(false);
   const [index, setIndex] = useState(-1);
-  const [timeElapsed, setTimeElapsed] = useState(0);
-  const characters = useSelector(state => state.characters);
+  const characters = useSelector(state => state.activeCharacters);
   useEffect(() => {
-    dispatch({ type: "GET_CHARACTERS" });
+    dispatch({ type: "GET_ACTIVE_CHARACTERS" });
+    dispatch({ type: "GET_INACTIVE_CHARACTERS" });
   }, []);
 
   const nextPlayer = () => {
     if (index < characters.length - 1) {
       setIndex(index + 1);
     } else {
-      setTimeElapsed(timeElapsed + 6);
       setIndex(0);
+      setTimeElapsed(timeElapsed + 6);
     }
     setTime(countDown);
   };
@@ -33,67 +37,36 @@ function TimeoutComponent() {
     setRunning(true);
   };
   return (
-    <div className="timer">
-      <NewPlayer />
-      {valuesSet ? (
-        <div className="white">
-          time per turn = {countDown}, extra time pool:{extraPool}
-        </div>
-      ) : (
-        <div>
-          <input
-            className="input"
-            placeholder="Time Per Turn"
-            value={countDown}
-            onChange={event => setCountDown(event.target.value)}
+    <div className="row">
+      <div className="row col-6">
+        <NewPlayer />
+      </div>
+      <div className="row col-6">
+        <InactivePlayers />
+      </div>
+      <div className="row col-8 d-flex justify-content-center">
+        <div className="col-12">
+          <AdjustSettings
+            setCountDown={setCountDown}
+            countDown={countDown}
+            setExtraPool={setExtraPool}
+            extraPool={extraPool}
+            startCombat={startCombat}
+            running={running}
+            setRunning={setRunning}
+            valuesSet={valuesSet}
+            setValuesSet={setValuesSet}
+            index={index}
+            nextPlayer={nextPlayer}
+            timeElapsed={timeElapsed}
+            setTimeElapsed={setTimeElapsed}
           />
-          <input
-            className="input"
-            placeholder="Extra Time Pool"
-            value={extraPool > -1 ? extraPool : ""}
-            onChange={event => {
-              console.log("setting extra pool to ", event.target.value);
-              setExtraPool(event.target.value);
-            }}
-          />
-          <button
-            className="btn btn-success"
-            onClick={() => setValuesSet(true)}
-          >
-            Set Values
-          </button>
         </div>
-      )}
-      {!running && valuesSet && index === -1 && (
-        <button className="btn btn-success" onClick={() => startCombat()}>
-          Start Combat
-        </button>
-      )}
-      {!running && valuesSet && index != -1 ? (
-        <button className="btn btn-success" onClick={() => setRunning(true)}>
-          Resume Combat
-        </button>
-      ) : (
-        running && (
-          <button className="btn btn-warning" onClick={() => setRunning(false)}>
-            Pause Combat
-          </button>
-        )
-      )}
-      {valuesSet && index != -1 && (
-        <div>
-          <button className="btn-sm btn-primary " onClick={() => nextPlayer()}>
-            Next Turn
-          </button>
-          <div className="white">
-            {" "}
-            time elapsed:{" "}
-            {Math.floor(timeElapsed / 60) + "m " + (timeElapsed % 60) + "s"}
-          </div>
+        <div className="col-12">
+          <Timer time={time} />
         </div>
-      )}
-      <h1 className="white">Time remaining: {time}</h1>x
-      <div className="row">
+      </div>
+      <div className="row col-12">
         {characters
           .sort((x, y) =>
             x.initiative < y.initiative
@@ -104,6 +77,7 @@ function TimeoutComponent() {
           )
           .map(x => (
             <PlayerTimer
+              className="row col-6"
               nextPlayer={nextPlayer}
               myTurn={index === characters.indexOf(x)}
               valuesSet={valuesSet}

@@ -3,9 +3,8 @@ const router = express.Router();
 const pool = require("../modules/pool.js");
 
 // GET Route
-router.get("/all", (req, res) => {
-  const queryText = `SELECT ch.*, cl.classname, cm.initiative, cm.has_initiative, cm.extra_time_pool FROM character ch 
-    INNER JOIN class cl on ch.class_id = cl.id 
+router.get("/active", (req, res) => {
+  const queryText = `SELECT ch.*, cm.initiative, cm.has_initiative, cm.extra_time_pool, cm.status_effect, cm.status_effect_time FROM character ch 
     INNER JOIN combat cm on cm.character_id = ch.id`;
   pool
     .query(queryText)
@@ -18,14 +17,13 @@ router.get("/all", (req, res) => {
     });
 });
 
-// GET Route
-router.get("/:id", (req, res) => {
-  const id = req.params.id;
+router.get("/inactive/", (req, res) => {
   const queryText =
-    "SELECT ch.*, cl.classname FROM character ch INNER JOIN class cl on ch.class_id = cl.id INNER JOIN campaign cm on ch.campaign_id = cm.id where ch.id = $1";
+    "SELECT * FROM character where character.id not in (select character_id from combat)";
   pool
-    .query(queryText, [id])
+    .query(queryText)
     .then(result => {
+      console.log(result.rows);
       res.send(result.rows);
     })
     .catch(error => {
@@ -42,6 +40,25 @@ router.put("/:id", (req, res) => {
   pool
     .query(queryText, [current_hitpoints, id])
     .then(result => {
+      res.send(result.rows);
+    })
+    .catch(error => {
+      console.log(`Error while making query: ${queryText}\n`);
+      res.sendStatus(500);
+    });
+});
+// GET Route
+router.post("/", (req, res) => {
+  const current_hitpoints = req.body.current_hitpoints;
+  const armor_class = req.body.armor_class;
+  const nickname = req.body.nickname;
+  console.log("nickname:", nickname, "current hitpoints: ", current_hitpoints);
+  const queryText =
+    "INSERT INTO character(nickname, armor_class, current_hitpoints) values($1,$2,$3) returning id";
+  pool
+    .query(queryText, [nickname, armor_class, current_hitpoints])
+    .then(result => {
+      console.log(result.rows);
       res.send(result.rows);
     })
     .catch(error => {
