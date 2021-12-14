@@ -1,0 +1,95 @@
+.App {
+  background-color: #282c34;
+}
+
+.App-logo {
+  height: 30vmin;
+  width: auto;
+  pointer-events: none;
+}
+
+.red {
+  color: red;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.TurnTimer {
+  height: 30vmin;
+  width: auto;
+  pointer-events: none;
+  animation: Turn-Timer infinite 20s linear;
+}
+@keyframes Turn-Timer {
+  80%,
+  100%,
+  0% {
+    transform: rotate(-6deg);
+  }
+  30%,
+  50% {
+    transform: rotate(174deg);
+  }
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+h4 {
+  padding-bottom: 7vmin;
+}
+.App-link {
+  color: #61dafb;
+}
+.centerHead {
+  align-items: center;
+  justify-content: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: calc(15px + 4vmin);
+  color: white;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-gap: 15px;
+}
+
+.grid-container > div {
+  text-align: center;
+  padding: 0px 10px 10px 10px;
+  font-size: 30px;
+}
+
+.item1 {
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
