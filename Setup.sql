@@ -25,7 +25,7 @@ CREATE TABLE "character"(
 
 CREATE TABLE "combat"(
     id serial primary key,
-    "character_id" varchar,
+    "character_id" integer,
     "initiative"  integer,
     "has_initiative" boolean default false,
     "extra_time_pool" integer default 0,
