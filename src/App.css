@@ -26,15 +26,15 @@
   height: 30vmin;
   width: auto;
   pointer-events: none;
-  animation: Turn-Timer infinite 20s linear;
+  animation: Turn-Timer infinite 10s linear;
 }
 @keyframes Turn-Timer {
-  80%,
+  70%,
   100%,
   0% {
     transform: rotate(-6deg);
   }
-  30%,
+  20%,
   50% {
     transform: rotate(174deg);
   }
@@ -92,4 +92,41 @@ h4 {
   to {
     transform: rotate(360deg);
   }
+}
+
+#DiceRollPage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+button #DiceRollPage img {
+  justify-self: center;
+}
+
+#AddToRollList {
+  flex: align-items;
+  background-color: #ffcf56;
+  height: 3em;
+}
+
+#buttonRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+#DiePic {
+  width: 5em;
+  height: 5em;
+}
+
+#cancelButton {
+  margin-top: 0.5em;
+}
+
+#advantageDiv,
+#result {
+  padding-left: 3em;
 }

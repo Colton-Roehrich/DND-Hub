@@ -8,6 +8,7 @@ import { default as About } from "./Pages/About";
 import { default as Contact } from "./Pages/Contact";
 import { default as DieRoller } from "./Pages/DieRoller";
 import { default as TurnTimer } from "./Pages/Turn Timer/TurnTimer";
+import DiceRoller from "./Pages/Dice Roller/DiceRoller";
 function App() {
   return (
     <div className="App">
@@ -17,7 +18,7 @@ function App() {
           <Route path="/" exact component={() => <Home />} />
           <Route path="/about" exact component={() => <About />} />
           <Route path="/contact" exact component={() => <Contact />} />
-          <Route path="/DieRoller" exact component={() => <DieRoller />} />
+          <Route path="/DieRoller" exact component={() => <DiceRoller />} />
           <Route path="/TurnTimer" exact component={() => <TurnTimer />} />
         </Switch>
       </Router>
