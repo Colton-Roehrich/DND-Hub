@@ -26,9 +26,13 @@ CREATE TABLE "character"(
 CREATE TABLE "combat"(
     id serial primary key,
     "character_id" varchar,
-    "initiative" integer default 0,
+    "initiative"  integer,
     "has_initiative" boolean default false,
     "extra_time_pool" integer default 0,
     "status_effect" varchar default '',
     "status_effect_time" integer default 0,
+   CONSTRAINT fk_character
+      FOREIGN KEY(character_id) 
+	  REFERENCES "character"(id)
+      ON DELETE CASCADE
     );
