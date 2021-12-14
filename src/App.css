@@ -17,6 +17,28 @@
   }
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.TurnTimer {
+  height: 30vmin;
+  width: auto;
+  pointer-events: none;
+  animation: Turn-Timer infinite 20s linear;
+}
+@keyframes Turn-Timer {
+  80%,
+  100%,
+  0% {
+    transform: rotate(-6deg);
+  }
+  30%,
+  50% {
+    transform: rotate(174deg);
+  }
+}
 .App-header {
   background-color: #282c34;
   min-height: 10vh;

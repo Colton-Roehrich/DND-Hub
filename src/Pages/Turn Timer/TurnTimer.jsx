@@ -6,7 +6,7 @@ import "../../Pages_Styling/TurnTimer.css";
 import Timer from "./Timer";
 import AdjustSettings from "./AdjustSettings";
 import NewPlayer from "./NewPlayer";
-import PlayerTimer from "./PlayerTimer";
+import Player from "./Player/Player";
 import InactivePlayers from "./InactivePlayers";
 function TimeoutComponent() {
   const dispatch = useDispatch();
@@ -76,7 +76,7 @@ function TimeoutComponent() {
               : 0
           )
           .map(x => (
-            <PlayerTimer
+            <Player
               className="row col-6"
               nextPlayer={nextPlayer}
               myTurn={index === characters.indexOf(x)}

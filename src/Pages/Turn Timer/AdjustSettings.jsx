@@ -34,7 +34,6 @@ function AdjustSettings(props) {
             placeholder="Extra Time Pool"
             value={extraPool > -1 ? extraPool : ""}
             onChange={event => {
-              console.log("setting extra pool to ", event.target.value);
               setExtraPool(event.target.value);
             }}
           />

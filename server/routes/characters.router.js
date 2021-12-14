@@ -35,10 +35,12 @@ router.get("/inactive/", (req, res) => {
 router.put("/:id", (req, res) => {
   const id = req.params.id;
   const current_hitpoints = req.body.current_hitpoints;
+  const dead = req.body.dead;
   console.log("id:", id, "current hitpoints: ", current_hitpoints);
-  const queryText = "UPDATE character set current_hitpoints = $1 where id = $2";
+  const queryText =
+    "UPDATE character set current_hitpoints = $1, dead=$2 where id = $3";
   pool
-    .query(queryText, [current_hitpoints, id])
+    .query(queryText, [current_hitpoints, dead, id])
     .then(result => {
       res.send(result.rows);
     })

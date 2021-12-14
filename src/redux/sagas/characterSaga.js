@@ -7,7 +7,6 @@ function* updateCharacter(action) {
       `/characters/${action.payload.id}`,
       action.payload
     );
-    console.log("FETCHED DATA: ", response);
     yield put({ type: "GET_ACTIVE_CHARACTERS" });
   } catch (error) {
     console.log("Error with characters:", error);
@@ -16,7 +15,6 @@ function* updateCharacter(action) {
 function* getInactiveCharacters(action) {
   try {
     const response = yield axios.get("/characters/inactive/");
-    console.log("FETCHED DATA: ", response);
     yield put({ type: "SET_INACTIVE_CHARACTERS", payload: response.data });
   } catch (error) {
     console.log("Error with characters:", error);
@@ -25,7 +23,6 @@ function* getInactiveCharacters(action) {
 function* getActiveCharacters(action) {
   try {
     const response = yield axios.get("/characters/active/");
-    console.log("FETCHED DATA: ", response);
     yield put({ type: "SET_ACTIVE_CHARACTERS", payload: response.data });
   } catch (error) {
     console.log("Error with characters:", error);
@@ -34,7 +31,6 @@ function* getActiveCharacters(action) {
 function* addCharacter(action) {
   try {
     const response = yield axios.post("/characters/", action.payload);
-    console.log(response.data[0]);
     yield put({ type: "GET_INACTIVE", payload: response.data[0] });
   } catch (error) {
     console.log("Error with characters:", error);

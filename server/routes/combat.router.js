@@ -8,11 +8,18 @@ router.put("/", (req, res) => {
   const initiative = req.body.initiative;
   const extraPool = req.body.extraPool;
   const has_initiative = req.body.has_initiative;
-  console.log(id, initiative, has_initiative, extraPool);
+  const status_effect = req.body.status_effect;
+  console.log(id, initiative, has_initiative, status_effect, extraPool);
   const queryText =
-    "UPDATE combat set initiative = $1, has_initiative = $2, extra_time_pool = $3 where character_id = $4";
+    "UPDATE combat set initiative = $1, has_initiative = $2, extra_time_pool = $3, status_effect = $4 where character_id = $5";
   pool
-    .query(queryText, [initiative, has_initiative, extraPool, id])
+    .query(queryText, [
+      initiative,
+      has_initiative,
+      extraPool,
+      status_effect,
+      id
+    ])
     .then(result => {
       res.send(result.rows);
     })
