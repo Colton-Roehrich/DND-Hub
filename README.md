@@ -1,6 +1,6 @@
 # DND Hub
 
-DND hub is a single page applications that gives you all of the tools you need to run your RPG.
+DND hub is a scollection of tools that gives you everything you need to run your RPG.
 
 ## Tools Included
 
